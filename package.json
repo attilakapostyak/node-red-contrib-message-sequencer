@@ -1,0 +1,27 @@
+{
+  "name": "node-red-contrib-message-sequencer",
+  "version": "1.0.0",
+  "description": "Record and play nodes for Node-RED message sequences.",
+  "dependencies": {},
+  "keywords": [
+    "node-red",
+    "sequencer",
+    "automation"
+  ],
+  "node-red": {
+    "nodes": {
+      "message-sequencer": "message-sequencer.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AttilaKapostyak/node-red-contrib-message-sequencer.git"
+  },
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/AttilaKapostyak/node-red-contrib-message-sequencer/issues"
+  },
+  "author": {
+    "name": "Attila Kapostyak"
+  }
+}

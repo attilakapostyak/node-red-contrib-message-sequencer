@@ -1,0 +1,27 @@
+{
+  "sequencer": {
+    "player": {
+      "label": {
+        "name": "Name",
+        "runOnLoad": "Play after load"
+      },
+      "hint": {
+        "name": "Name the node",
+        "runOnLoad": "Play after loading sequence"
+      }
+    },
+    "recorder": {
+      "label": {
+        "name": "Name",
+        "max_elements": "Element limit",
+        "max_duration": "Duration in sec.",
+        "start_immediately": "Start immediately"
+      },
+      "hint": {
+        "name": "name",
+        "max_duration": "Stop recording after n seconds, 0 = no limit",
+        "max_elements": "Stop after recording n messages, 0 = no limit"
+      }
+    }
+  }
+}

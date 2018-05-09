@@ -1,0 +1,133 @@
+<!--
+  Copyright 2013, 2016 IBM Corp.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="sequencer-player">
+    <div class="form-row">
+        <label for="node-input-name" style="min-width: 130px; vertical-align: top;"><i class="fa fa-tag"></i> <span data-i18n="sequencer.player.label.name"></span></label>
+        <input type="text" id="node-input-name" style="display: inline-block; min-width: 300px; width: auto; vertical-align: top;" data-i18n="common.label.name">
+    </div>
+    <div class="form-row">
+      <label for="node-input-runOnLoad" style="min-width: 130px; vertical-align: top;"><i class="fa fa-rocket"></i> <span data-i18n="sequencer.player.label.runOnLoad"></span></label>
+      <input type="checkbox" id="node-input-runOnLoad" style="display: inline-block; width: auto; vertical-align: top;">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="sequencer-player">
+    <p>Replays previously recorded message sequences with the same delays as recorded.</p>
+    <p>A player node can run multiple sequences in parallel. These are identified by the sequence name.</p>
+    <p>Following commands are available:</p>
+    <ul>
+      <li><code>msg.name</code>The name of the sequence being played, paused, stopped or loaded. Sequence objects already contain a name, which can be overwritten with this.</li>
+      <li><code>msg.sequence</code> load sequences into player (format: JSON or sequence object)</li>
+      <li><code>msg.play</code> plays the loaded sequence(s). Property value = sequence name(s)</li>
+      <li><code>msg.stop</code> stops the currently played sequence(s) / start over with <code>msg.play</code></li>
+      <li><code>msg.remove</code> removes a sequence from the player</li>
+    </ul>
+    <p>play, pause, stop and remove properties take either a string or an array containing the name(s)</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('sequencer-player',{
+        category: 'automation',
+        defaults: {
+            name: {value:"Sequence Player"},
+            runOnLoad: {value:false}
+        },
+        color:"#E2D96E",
+        inputs:1,
+        outputs:1,
+        icon: "play.png",
+        paletteLabel: function() {
+            return this.name||"sequencer-player";
+        },
+        label: function() {
+            return this.name||"sequencer-player";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+        oneditsave: function() {
+          if ($("#node-input-runOnLoad").is(":checked")) {
+            this.runOnLoad = true
+          } else {
+            this.runOnLoad = false
+          }
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="sequencer-recorder">
+    <div class="form-row">
+        <label for="node-input-name" style="display: inline-block; min-width: 130px; vertical-align: top;"><i class="fa fa-tag"></i> <span data-i18n="sequencer.recorder.label.name"></span></label>
+        <input type="text" id="node-input-name" style="display: inline-block; min-width: 300px; width: auto; vertical-align: top;" data-i18n="[placeholder]sequencer.recorder.label.name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-maxElements" style="display: inline-block; min-width: 130px; vertical-align: top;"><i class="fa fa-sort-numeric-asc"></i> <span data-i18n="sequencer.recorder.label.max_elements"></label>
+        <input type="number" id="node-input-maxElements" min=0 style="display: inline-block; min-width: 300px; width: auto; vertical-align: top;" data-i18n="[placeholder]sequencer.recorder.hint.max_elements"><br>
+        <span data-i18n="sequencer.recorder.hint.max_elements" style="color: grey; font-size: 12px; padding-left: 135px;"></span>
+    </div>
+    <div class="form-row">
+        <label for="node-input-maxDuration" style="display: inline-block; min-width: 130px; vertical-align: top;"><i class="fa fa-clock-o"></i> <span data-i18n="sequencer.recorder.label.max_duration"></span></label>
+        <input type="number" id="node-input-maxDuration" min=0 style="display: inline-block; min-width: 300px; width: auto; vertical-align: top;" data-i18n="[placeholder]sequencer.recorder.hint.max_duration"><br>
+        <span data-i18n="sequencer.recorder.hint.max_duration" style="color: grey; font-size: 12px; padding-left: 135px;"></span>
+    </div>
+    <div class="form-row">
+        <label for="node-input-startImmediately" style="display: inline-block; min-width: 130px; vertical-align: top;"><i class="fa fa-rocket"></i> <span data-i18n="sequencer.recorder.label.start_immediately"></span></label>
+        <input type="checkbox" id="node-input-startImmediately" style="display: inline-block; width: auto; vertical-align: top;">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="sequencer-recorder">
+    <p>Records message sequences and the relative time they arrive.</p>
+    <p>when recording stops, the recorded sequence will be emitted as a single message.</p>
+    <p>Following commands are available:</p>
+    <ul>
+      <li><code>msg.start</code> records a new sequence</li>
+      <li><code>msg.stop</code> stops current recording and return already recorded sequence</li>
+    </ul>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('sequencer-recorder',{
+        category: 'automation',
+        defaults: {
+            name: {value:"Sequence Recorder"},
+            maxElements: {value:""},
+            maxDuration: {value:""},
+            startImmediately: {value:true}
+        },
+        color:"#E2D96E",
+        inputs:1,
+        outputs:1,
+        icon: "record.png",
+        paletteLabel: function() {
+            return this.name||"sequencer-recorder";
+        },
+        label: function() {
+            return this.name||"sequencer-recorder";
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+        oneditsave: function() {
+          if ($("#node-input-startImmediately").is(":checked")) {
+            this.startImmediately = true;
+          } else {
+            this.startImmediately = false;
+          }
+        }
+    });
+</script>
