@@ -221,12 +221,10 @@ module.exports = function(RED) {
                         }
 
                         if (_currentElement.delay <= (Date.now() - _startedAt)) {
-//                            _node.send({ topic: "delay", payload: _currentElement.delay });
-//                            _node.send({ topic: "time", payload: Date.now() - _startedAt });
-                    _node.send(_currentElement.data);
+                            _node.send(_currentElement.data);
                             _currentElement = _seq.next();
-                }
-            }
+                        }       
+                    }
                     if (_currentElement === null) {
                         clearInterval(timerId);
                         _nodeInstance.stop();
@@ -239,24 +237,6 @@ module.exports = function(RED) {
             }
         }
 
-        /*
-        function run() {
-            if (_isPlaying && _seq.hasNext()) {
-                _currentElement = _seq.next();
-
-                var timer = setTimeout(function() {
-                    _startedAt = Date.now();
-                    _node.send(_currentElement.data);
-                    run();
-                }, _currentElement.delay);
-                _lastTimer = timer;
-
-
-            } else if (!_seq.hasNext()) {
-                _nodeInstance.stop();
-            }
-        }
-*/
         this.stop = function() {
             clearTimeout(_lastTimer);
             _isPlaying = false;
